@@ -7,36 +7,43 @@
   function getCollaborators() {
     return fetch(
       "https://api.github.com/repos/MLH-Fellowship/prep-portfolio-23.MAR.PREP.2/contributors"
-    )
-      .then((res) => res.json())
+    ).then((res) => res.json());
   }
 
   async function displayCollaborators() {
     function sortCollaboratorsByNumberOfContributions(collaboratorData) {
-      return collaboratorData.sort((a, b) => b.contributions - a.contributions)
+      return collaboratorData.sort((a, b) => b.contributions - a.contributions);
     }
-    
-    function createCollaboratorCard({login: username, avatar_url, url, contributions}) {
+
+    function createCollaboratorCard({
+      login: username,
+      avatar_url,
+      url,
+      contributions,
+    }) {
       const card = document.createElement("div");
-      card.className = "card"
+      card.className = "card";
 
-      const name = document.createElement("p")
-      name.textContent = username
+      const avatar = document.createElement("img");
+      avatar.src = avatar_url;
 
-      const avatar = document.createElement("img")
-      avatar.src = avatar_url
+      const name = document.createElement("p");
+      name.className = "username";
+      name.textContent = username;
 
       const numberOfContributions = document.createElement("p");
-      numberOfContributions.textContent = contributions
+      numberOfContributions.className = "contributions"
+      numberOfContributions.textContent = contributions;
 
-      card.append(name, avatar, numberOfContributions);
+      card.append(avatar, name, numberOfContributions);
       leaderboard.append(card);
     }
-    
+
     const collaboratorData = await getCollaborators();
-    const sortedCollaboratorData = sortCollaboratorsByNumberOfContributions(collaboratorData);
-    
-    sortedCollaboratorData.forEach(createCollaboratorCard)
+    const sortedCollaboratorData =
+      sortCollaboratorsByNumberOfContributions(collaboratorData);
+
+    sortedCollaboratorData.forEach(createCollaboratorCard);
   }
 
   displayCollaborators();
